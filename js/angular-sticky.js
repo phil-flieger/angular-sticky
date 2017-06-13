@@ -164,6 +164,7 @@ angular.module('hl.sticky', [])
 			var anchor = typeof options.anchor === 'string' ? options.anchor.toLowerCase().trim() : 'top';
 			var container = null;
 			var stack = options.stack === false ? null : options.stack || hlStickyStack();
+			var allocateZIndex = options.allocateZIndex === true ? true : false;
 
 			var event = angular.isFunction(options.event) ? options.event : angular.noop;
 			var globalOffset = {
@@ -282,9 +283,12 @@ angular.module('hl.sticky', [])
 				var css = {
 					'width': elementWidth() + 'px',
 					'position': 'fixed',
-					'left': rect.left + 'px',
-					'z-index': stack ? stack.get(id).zIndex - (globalOffset.zIndex || 0) : null
+					'left': rect.left + 'px'
 				};
+
+				if (allocateZIndex) {
+					css['z-index'] = stack ? stack.get(id).zIndex - (globalOffset.zIndex || 0) : null;
+				}
 
 				css['margin-' + anchor] = 0;
 				element.css(css);
